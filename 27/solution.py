@@ -2,34 +2,39 @@ import unittest
 from typing import List
 
 
-# time complexity: O(n^2)...
-class Solution:
-    # [1,2,3] -> [1,3]
-    # [1,2,3,4] -> [1,3,4]
-    def removeElementByIndex(self, nums: List[int], index: int) -> List[int]:
-        for i in range(index, len(nums)):
-            if i + 1 < len(nums):
-                nums[i] = nums[i + 1]
-            else:
-                nums[i] = None
-
-    def removeElement(self, nums: List[int], val: int) -> int:
-        count = 0
-        i = 0
-        while i < len(nums):
-            print(nums)
-            if nums[i] == val:
-                count += 1
-                self.removeElementByIndex(nums, i)
-            else:
-                i += 1
-        return len(nums) - count
+# # time complexity: O(n^2)...
+# class Solution:
+#     # [1,2,3] -> [1,3]
+#     # [1,2,3,4] -> [1,3,4]
+#     def removeElementByIndex(self, nums: List[int], index: int) -> List[int]:
+#         for i in range(index, len(nums)):
+#             if i + 1 < len(nums):
+#                 nums[i] = nums[i + 1]
+#             else:
+#                 nums[i] = None
+# 
+#     def removeElement(self, nums: List[int], val: int) -> int:
+#         count = 0
+#         i = 0
+#         while i < len(nums):
+#             print(nums)
+#             if nums[i] == val:
+#                 count += 1
+#                 self.removeElementByIndex(nums, i)
+#             else:
+#                 i += 1
+#         return len(nums) - count
 
 
 # time complexity: O(n)
-# class Solution:
-#     def removeElement(self, nums: List[int], val: int) -> int:
-#         return
+class Solution:
+    def removeElement(self, nums: List[int], val: int) -> int:
+        k = 0
+        for num in nums:
+            if num != val:
+                nums[k] = num
+                k += 1
+        return k
 
 
 class TestSolution(unittest.TestCase):
