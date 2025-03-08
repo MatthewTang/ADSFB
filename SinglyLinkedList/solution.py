@@ -8,10 +8,67 @@ class ListNode:
         self.next: Optional["ListNode"] = next
 
 
+# class LinkedList:
+#     def __init__(self):
+#         self.head = None
+#         self.tail = None
+#
+#     def getNode(self, index: int) -> ListNode:
+#         i = 0
+#         curr = self.head
+#         while i < index and curr:
+#             curr = curr.next
+#             i += 1
+#         return curr if curr else None
+#
+#     def get(self, index: int) -> int:
+#         return self.getNode(index).val if self.getNode(index) else -1
+#
+#     def insertHead(self, val: int) -> None:
+#         n = ListNode(val, self.head)
+#         self.head = n
+#         if not self.tail:
+#             self.tail = n
+#
+#     def insertTail(self, val: int) -> None:
+#         n = ListNode(val)
+#         if self.tail:
+#             self.tail.next = n
+#         self.tail = n
+#         if not self.head:
+#             self.head = n
+#
+#     def remove(self, index: int) -> bool:
+#         # if self.head is None or self.tail is None:
+#         #     return False
+#         if index == 0:
+#             if self.head.next is None:
+#                 self.tail = None
+#             self.head = self.head.next
+#             return True
+#
+#         target = self.getNode(index)
+#         if not target:
+#             return False
+#
+#         prev = self.getNode(index - 1)
+#         if prev.next.next is None:
+#             self.tail = prev
+#         prev.next = prev.next.next if prev.next else None
+#         return True
+#
+#     def getValues(self) -> List[int]:
+#         l = []
+#         curr = self.head
+#         while curr:
+#             l.append(curr.val)
+#             curr = curr.next
+#         return l
+
+
 class LinkedList:
     def __init__(self):
-        self.head = None
-        self.tail = None
+        self.head = self.tail = ListNode(-1)
 
     def getNode(self, index: int) -> ListNode:
         i = 0
@@ -21,45 +78,36 @@ class LinkedList:
             i += 1
         return curr if curr else None
 
-    def get(self, index: int) -> int:
+    def get(self, _index: int) -> int:
+        index = _index + 1
         return self.getNode(index).val if self.getNode(index) else -1
 
     def insertHead(self, val: int) -> None:
-        n = ListNode(val, self.head)
-        self.head = n
-        if not self.tail:
+        n = ListNode(val, self.head.next)
+        if not self.head.next:
             self.tail = n
+        self.head.next = n
 
     def insertTail(self, val: int) -> None:
         n = ListNode(val)
-        if self.tail:
-            self.tail.next = n
+        self.tail.next = n
         self.tail = n
-        if not self.head:
-            self.head = n
 
     def remove(self, index: int) -> bool:
-        # if self.head is None or self.tail is None:
-        #     return False
-        if index == 0:
-            if self.head.next is None:
-                self.tail = None
-            self.head = self.head.next
-            return True
-
-        target = self.getNode(index)
+        prev = self.getNode(index)
+        if not prev:
+            return False
+        target = prev.next
         if not target:
             return False
-
-        prev = self.getNode(index - 1)
-        if prev.next.next is None:
+        if not target.next:
             self.tail = prev
-        prev.next = prev.next.next if prev.next else None
+        prev.next = target.next
         return True
 
     def getValues(self) -> List[int]:
         l = []
-        curr = self.head
+        curr = self.head.next
         while curr:
             l.append(curr.val)
             curr = curr.next
