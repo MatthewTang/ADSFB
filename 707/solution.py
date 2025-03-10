@@ -121,12 +121,6 @@ class Test(unittest.TestCase):
         ll.deleteAtIndex(0)
         ll.get(0)
 
-    # def test5(self):
-    #     ll = LinkedList()
-    #     ll.insertHead(1)
-    #     self.assertEqual(ll.remove(2), False)
-    #     self.assertEqual(ll.remove(1), False)
-
 
 if __name__ == "__main__":
     unittest.main()
