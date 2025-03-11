@@ -7,15 +7,18 @@ class BrowserHistory:
         self.history: List = [homepage]
         self.curr: int = 0
 
+    # time complexity: O(self.curr), because list[:self.curr] is O(self.curr)
     def visit(self, url: str) -> None:
         self.curr += 1
         self.history = self.history[: self.curr]
         self.history.append(url)
 
+    # time complexity: O(1)
     def back(self, steps: int) -> str:
         self.curr = max(self.curr - steps, 0)
         return self.history[self.curr]
 
+    # time complexity: O(1)
     def forward(self, steps: int) -> Optional[str]:
         self.curr = min(self.curr + steps, len(self.history) - 1)
         return self.history[self.curr]
