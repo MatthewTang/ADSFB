@@ -5,7 +5,7 @@ from collections import deque
 
 class Solution:
     def countStudents(self, students: List[int], sandwiches: List[int]) -> int:
-        queue: List[List[int]] = deque([[pref, -1] for pref in students])
+        queue: Deque[List[int]] = deque([[pref, -1] for pref in students])
         topSandwich = 0
         while topSandwich < len(sandwiches) and queue:
             topStudent = queue.popleft()
