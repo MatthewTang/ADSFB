@@ -13,8 +13,8 @@ class Pair:
 
 class Solution:
     def insertionSort(self, pairs: List[Pair]) -> List[List[Pair]]:
-        res = [pairs[:]]
-        for i in range(1, len(pairs)):
+        res = []
+        for i in range(len(pairs)):
             j = i - 1
             while j >= 0 and pairs[j].key > pairs[j + 1].key:
                 pairs[j], pairs[j + 1] = pairs[j + 1], pairs[j]
