@@ -13,34 +13,31 @@ class Pair:
 
 class Solution:
     def mergeSort(self, pairs: List[Pair]) -> List[Pair]:
-        def _mergeSort(pairs):
-            # base case
-            if len(pairs) == 1:
-                return pairs
+        # base case
+        if len(pairs) <= 1:
+            return pairs
 
-            mid = len(pairs) // 2
-            left = _mergeSort(pairs[:mid])
-            right = _mergeSort(pairs[mid:])
+        mid = len(pairs) // 2
+        left = self.mergeSort(pairs[:mid])
+        right = self.mergeSort(pairs[mid:])
 
-            # merge sorted left and right
-            merged = []
-            lp = rp = 0
-            while lp < len(left) or rp < len(right):
-                if lp >= len(left):
-                    merged += right[rp:]
-                    return merged
-                if rp >= len(right):
-                    merged += left[lp:]
-                    return merged
-                if left[lp].key <= right[rp].key:
-                    merged.append(left[lp])
-                    lp += 1
-                else:
-                    merged.append(right[rp])
-                    rp += 1
-            return merged
-
-        return _mergeSort(pairs)
+        # merge sorted left and right
+        merged = []
+        lp = rp = 0
+        while lp < len(left) or rp < len(right):
+            if lp >= len(left):
+                merged += right[rp:]
+                return merged
+            if rp >= len(right):
+                merged += left[lp:]
+                return merged
+            if left[lp].key <= right[rp].key:
+                merged.append(left[lp])
+                lp += 1
+            else:
+                merged.append(right[rp])
+                rp += 1
+        return merged
 
 
 class Test(unittest.TestCase):
@@ -69,6 +66,16 @@ class Test(unittest.TestCase):
     def test2(self):
         input_tuple = [(3, "cat"), (2, "dog"), (3, "bird")]
         expected_tuple = [(2, "dog"), (3, "cat"), (3, "bird")]
+        pairs: List[Pair] = [Pair(p[0], p[1]) for p in input_tuple]
+        expected_pairs: List[Pair] = [Pair(p[0], p[1]) for p in expected_tuple]
+        s = Solution()
+        result = s.mergeSort(pairs)
+        print(result)
+        self.assertEqual(str(result), str(expected_pairs))
+
+    def test3(self):
+        input_tuple = []
+        expected_tuple = []
         pairs: List[Pair] = [Pair(p[0], p[1]) for p in input_tuple]
         expected_pairs: List[Pair] = [Pair(p[0], p[1]) for p in expected_tuple]
         s = Solution()
