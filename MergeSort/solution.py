@@ -12,32 +12,80 @@ class Pair:
 
 
 class Solution:
+    # # time: O(nlogn) space: O(n)
+    # def mergeSort(self, pairs: List[Pair]) -> List[Pair]:
+    #     # base case
+    #     if len(pairs) <= 1:
+    #         return pairs
+    #
+    #     mid = len(pairs) // 2
+    #     left = self.mergeSort(pairs[:mid])
+    #     right = self.mergeSort(pairs[mid:])
+    #
+    #     # merge sorted left and right
+    #     merged = []
+    #     lp = rp = 0
+    #     while lp < len(left) or rp < len(right):
+    #         if lp >= len(left):
+    #             merged += right[rp:]
+    #             return merged
+    #         if rp >= len(right):
+    #             merged += left[lp:]
+    #             return merged
+    #         if left[lp].key <= right[rp].key:
+    #             merged.append(left[lp])
+    #             lp += 1
+    #         else:
+    #             merged.append(right[rp])
+    #             rp += 1
+    #     return merged
+
+    # using pointers
     def mergeSort(self, pairs: List[Pair]) -> List[Pair]:
-        # base case
-        if len(pairs) <= 1:
-            return pairs
+        def _mergeSort(pairs, s, e):
+            if e - s == 0:
+                return
 
-        mid = len(pairs) // 2
-        left = self.mergeSort(pairs[:mid])
-        right = self.mergeSort(pairs[mid:])
+            mid = (s + e) // 2
+            _mergeSort(pairs, s, mid)
+            _mergeSort(pairs, mid + 1, e)
 
-        # merge sorted left and right
-        merged = []
-        lp = rp = 0
-        while lp < len(left) or rp < len(right):
-            if lp >= len(left):
-                merged += right[rp:]
-                return merged
-            if rp >= len(right):
-                merged += left[lp:]
-                return merged
-            if left[lp].key <= right[rp].key:
-                merged.append(left[lp])
-                lp += 1
-            else:
-                merged.append(right[rp])
-                rp += 1
-        return merged
+            merge(pairs, s, mid, e)
+
+            return
+
+        def merge(pairs, s, mid, e):
+            l = pairs[s : mid + 1]
+            r = pairs[mid + 1 : e + 1]
+
+            i = 0
+            j = 0
+            k = s
+
+            while i < len(l) and j < len(r):
+                if l[i].key <= r[j].key:
+                    pairs[k] = l[i]
+                    i += 1
+                else:
+                    pairs[k] = r[j]
+                    j += 1
+                k += 1
+
+            while i < len(l):
+                pairs[k] = l[i]
+                i += 1
+                k += 1
+            while j < len(r):
+                pairs[k] = r[j]
+                j += 1
+                k += 1
+
+            return
+
+        if len(pairs) > 0:
+            _mergeSort(pairs, 0, len(pairs) - 1)
+
+        return pairs
 
 
 class Test(unittest.TestCase):
@@ -60,7 +108,6 @@ class Test(unittest.TestCase):
         expected_pairs: List[Pair] = [Pair(p[0], p[1]) for p in expected_tuple]
         s = Solution()
         result = s.mergeSort(pairs)
-        print(result)
         self.assertEqual(str(result), str(expected_pairs))
 
     def test2(self):
@@ -70,7 +117,6 @@ class Test(unittest.TestCase):
         expected_pairs: List[Pair] = [Pair(p[0], p[1]) for p in expected_tuple]
         s = Solution()
         result = s.mergeSort(pairs)
-        print(result)
         self.assertEqual(str(result), str(expected_pairs))
 
     def test3(self):
@@ -80,7 +126,15 @@ class Test(unittest.TestCase):
         expected_pairs: List[Pair] = [Pair(p[0], p[1]) for p in expected_tuple]
         s = Solution()
         result = s.mergeSort(pairs)
-        print(result)
+        self.assertEqual(str(result), str(expected_pairs))
+
+    def test4(self):
+        input_tuple = [(3, "cat")]
+        expected_tuple = [(3, "cat")]
+        pairs: List[Pair] = [Pair(p[0], p[1]) for p in input_tuple]
+        expected_pairs: List[Pair] = [Pair(p[0], p[1]) for p in expected_tuple]
+        s = Solution()
+        result = s.mergeSort(pairs)
         self.assertEqual(str(result), str(expected_pairs))
 
 
