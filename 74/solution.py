@@ -3,34 +3,52 @@ from typing import List, Optional
 
 
 class Solution:
-    # time: O(logm + logn) -> O(log(m*n)), m no. of rows, n no. of cols, space: O(1)
+    # # time: O(logm + logn) -> O(log(m*n)), m no. of rows, n no. of cols, space: O(1)
+    # def searchMatrix(self, matrix: List[List[int]], target: int) -> bool:
+    #     rows, cols = len(matrix), len(matrix[0])
+    #
+    #     top, bot = 0, rows - 1
+    #
+    #     while top <= bot:
+    #         row = (top + bot) // 2
+    #         if target > matrix[row][-1]:
+    #             top = row + 1
+    #         elif target < matrix[row][0]:
+    #             bot = row - 1
+    #         else:
+    #             break
+    #
+    #     if not (top <= bot):
+    #         return False
+    #
+    #     l, r = 0, cols - 1
+    #
+    #     row = matrix[row]
+    #
+    #     while l <= r:
+    #         m = (l + r) // 2
+    #         if row[m] > target:
+    #             r = m - 1
+    #         elif row[m] < target:
+    #             l = m + 1
+    #         else:
+    #             return True
+    #
+    #     return False
+
+    # time: O(log(m*n)), space: O(1), m no. of rows, n no. of cols, single loop approach
     def searchMatrix(self, matrix: List[List[int]], target: int) -> bool:
         rows, cols = len(matrix), len(matrix[0])
 
-        top, bot = 0, rows - 1
-
-        while top <= bot:
-            row = (top + bot) // 2
-            if target > matrix[row][-1]:
-                top = row + 1
-            elif target < matrix[row][0]:
-                bot = row - 1
-            else:
-                break
-
-        if not (top <= bot):
-            return False
-
-        l, r = 0, cols - 1
-
-        row = matrix[row]
+        l, r = 0, rows * cols - 1
 
         while l <= r:
             m = (l + r) // 2
-            if row[m] > target:
-                r = m - 1
-            elif row[m] < target:
+            row, col = m // cols, m % cols
+            if target > matrix[row][col]:
                 l = m + 1
+            elif target < matrix[row][col]:
+                r = m - 1
             else:
                 return True
 
