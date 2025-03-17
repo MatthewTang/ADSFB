@@ -43,7 +43,8 @@ class Solution:
         l, r = 0, rows * cols - 1
 
         while l <= r:
-            m = (l + r) // 2
+            # m = (l + r) // 2
+            m = l + (r - l) // 2 # to avoid overflow
             row, col = m // cols, m % cols
             if target > matrix[row][col]:
                 l = m + 1
