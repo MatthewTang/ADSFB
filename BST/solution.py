@@ -7,13 +7,13 @@ class Solution:
     def searchBST(self, root: TreeNode, target: int) -> bool:
         if not root:
             return False
-        if root.val == target:
-            return True
 
         if root.val > target:
             return self.searchBST(root.left, target)
-        else:
+        elif root.val < target:
             return self.searchBST(root.right, target)
+        else:
+            return True
 
 
 class Test(unittest.TestCase):
