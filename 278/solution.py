@@ -14,20 +14,17 @@ class Solution:
 
         return False
 
+    # time: O(log(n)), space: O(1)
     def firstBadVersion(self, n: int) -> int:
         l, r = 1, n
-
         res = -1
         while l <= r:
             m = (l + r) // 2
-            print(f"l: {l}, r: {r}, m: {m}")
-
             if self.isBadVersion(m):
                 res = m
                 r = m - 1
             else:
                 l = m + 1
-
         return res
 
 
