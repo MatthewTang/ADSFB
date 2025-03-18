@@ -15,6 +15,20 @@ class TreeNode:
     def __repr__(self) -> str:
         return str(self.val)
 
+    def __eq__(self, other):
+        if not isinstance(other, TreeNode):
+            return False
+        return (
+            self.val == other.val
+            and (
+                (self.left is None and other.left is None) or (self.left == other.left)
+            )
+            and (
+                (self.right is None and other.right is None)
+                or (self.right == other.right)
+            )
+        )
+
 
 def main():
     node = TreeNode(1)
