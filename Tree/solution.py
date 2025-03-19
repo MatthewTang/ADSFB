@@ -64,6 +64,7 @@ class TreeNode:
         return "\n".join(lines)
 
 
+# time: O(logn), space: O(logn), recursive call stack with TCO
 def insert(root: Optional[TreeNode], val: int) -> TreeNode:
     if not root:
         return TreeNode(val)
@@ -76,6 +77,7 @@ def insert(root: Optional[TreeNode], val: int) -> TreeNode:
     return root
 
 
+# time: O(logn), space: O(1)
 def findMin(root: TreeNode) -> int:
     res = root.val
     while root.left:
@@ -84,6 +86,7 @@ def findMin(root: TreeNode) -> int:
     return res
 
 
+# time: O(logn), space: O(logn)
 def remove(root: Optional[TreeNode], val: int) -> Optional[TreeNode]:
     if not root:
         return
