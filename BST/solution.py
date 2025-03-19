@@ -26,7 +26,7 @@ class Test(unittest.TestCase):
         root = TreeNode(2, TreeNode(1), TreeNode(3, None, TreeNode(4)))
         self.assertTrue(s.searchBST(root, 3))
 
-    def test1(self):
+    def test2(self):
         s = Solution()
         root = TreeNode(2, TreeNode(1), TreeNode(4, None, TreeNode(5)))
         self.assertFalse(s.searchBST(root, 3))

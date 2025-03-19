@@ -1,3 +1,4 @@
+import unittest
 from typing import Optional
 
 
@@ -12,8 +13,14 @@ class TreeNode:
         self.left = left
         self.right = right
 
+    # print tree graph
     def __repr__(self) -> str:
-        return str(self.val)
+        result = f"TreeNode({self.val}"
+        if self.left or self.right:
+            result += f", {self.left.__repr__() if self.left else 'None'}"
+            result += f", {self.right.__repr__() if self.right else 'None'}"
+        result += ")"
+        return result
 
     def __eq__(self, other):
         if not isinstance(other, TreeNode):
@@ -29,11 +36,129 @@ class TreeNode:
             )
         )
 
+    def draw_tree(self) -> str:
+        def _build_lines(node, prefix="", is_tail=True):
+            if not node:
+                return []
 
-def main():
-    node = TreeNode(1)
-    print(node)
+            lines = [f"{prefix}{'└── ' if is_tail else '├── '}{node.val}"]
+
+            children = []
+            if node.left:
+                children.append((node.left, "left"))
+            if node.right:
+                children.append((node.right, "right"))
+
+            for i, (child, _) in enumerate(children[:-1] if children else []):
+                new_prefix = prefix + ("    " if is_tail else "│   ")
+                lines.extend(_build_lines(child, new_prefix, False))
+
+            if children:
+                last_child, _ = children[-1]
+                new_prefix = prefix + ("    " if is_tail else "│   ")
+                lines.extend(_build_lines(last_child, new_prefix, True))
+
+            return lines
+
+        lines = _build_lines(self)
+        return "\n".join(lines)
+
+
+def insert(root: Optional[TreeNode], val: int) -> TreeNode:
+    if not root:
+        return TreeNode(val)
+
+    if val > root.val:
+        root.right = insert(root.right, val)
+    elif val < root.val:
+        root.left = insert(root.left, val)
+
+    return root
+
+
+def findMin(root: TreeNode) -> int:
+    res = root.val
+    while root.left:
+        root = root.left
+        res = root.val
+    return res
+
+
+def remove(root: Optional[TreeNode], val: int) -> Optional[TreeNode]:
+    if not root:
+        return
+    if val > root.val:
+        root.right = remove(root.right, val)
+    elif val < root.val:
+        root.left = remove(root.left, val)
+    else:
+        # root has 1 or 0 children
+        if not root.left:
+            return root.right
+        if not root.right:
+            return root.left
+
+        # root has 2 children
+        right_min = findMin(root.right)
+        root.val = right_min
+        root.right = remove(root.right, right_min)
+
+    return root
+
+
+class Test(unittest.TestCase):
+    def test1(self):
+        root = TreeNode(2, TreeNode(1), TreeNode(3, None, TreeNode(4)))
+        output = insert(root, 5)
+        expected = TreeNode(
+            2, TreeNode(1), TreeNode(3, None, TreeNode(4, None, TreeNode(5)))
+        )
+        self.assertEqual(output, expected)
+
+    def test2(self):
+        root = TreeNode(2, TreeNode(1), TreeNode(3, None, TreeNode(4)))
+        output = findMin(root)
+        expected = 1
+        self.assertEqual(output, expected)
+
+    def test3(self):
+        root = TreeNode(2, TreeNode(1, TreeNode(0)), TreeNode(3, None, TreeNode(4)))
+        output = findMin(root)
+        expected = 0
+        self.assertEqual(output, expected)
+
+    def test4(self):
+        root = TreeNode(
+            4, TreeNode(3, TreeNode(2)), TreeNode(6, TreeNode(5), TreeNode(7))
+        )
+        output = remove(root, 2)
+        expected = TreeNode(4, TreeNode(3), TreeNode(6, TreeNode(5), TreeNode(7)))
+        self.assertEqual(output, expected)
+
+    def test5(self):
+        root = TreeNode(
+            4, TreeNode(3, TreeNode(2)), TreeNode(6, TreeNode(5), TreeNode(7))
+        )
+        output = remove(root, 3)
+        expected = TreeNode(4, TreeNode(2), TreeNode(6, TreeNode(5), TreeNode(7)))
+        self.assertEqual(output, expected)
+
+    def test6(self):
+        root = TreeNode(
+            4, TreeNode(3, TreeNode(2)), TreeNode(6, TreeNode(5), TreeNode(7))
+        )
+        output = remove(root, 4)
+        expected = TreeNode(5, TreeNode(3, TreeNode(2)), TreeNode(6, None, TreeNode(7)))
+        self.assertEqual(output, expected)
+
+    def test7(self):
+        root = TreeNode(
+            4, TreeNode(3, TreeNode(2)), TreeNode(6, TreeNode(5), TreeNode(7))
+        )
+        output = remove(root, 6)
+        expected = TreeNode(4, TreeNode(3, TreeNode(2)), TreeNode(7, TreeNode(5)))
+        self.assertEqual(output, expected)
 
 
 if __name__ == "__main__":
-    main()
+    unittest.main()
