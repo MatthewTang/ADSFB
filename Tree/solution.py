@@ -1,5 +1,5 @@
 import unittest
-from typing import Optional
+from typing import Optional, List
 
 
 class TreeNode:
@@ -109,6 +109,90 @@ def remove(root: Optional[TreeNode], val: int) -> Optional[TreeNode]:
     return root
 
 
+# all of the following are DPS
+# time: O(n)
+def inorder(root: Optional[TreeNode], l: List[int] = []) -> List[int]:
+    if not root:
+        return l
+    l = inorder(root.left, l)
+    l.append(root.val)
+    l = inorder(root.right, l)
+    return l
+
+
+def preorder(root: Optional[TreeNode], l: List[int] = []) -> List[int]:
+    if not root:
+        return l
+    l.append(root.val)
+    l = preorder(root.left, l)
+    l = preorder(root.right, l)
+    return l
+
+
+def postorder(root: Optional[TreeNode], l: List[int] = []) -> List[int]:
+    if not root:
+        return l
+    l = postorder(root.left, l)
+    l = postorder(root.right, l)
+    l.append(root.val)
+    return l
+
+
+# time: O(n)
+def reverse_inorder(root: Optional[TreeNode], l: List[int] = []) -> List[int]:
+    if not root:
+        return l
+    l = reverse_inorder(root.right, l)
+    l.append(root.val)
+    l = reverse_inorder(root.left, l)
+    return l
+
+
+def reverse_preorder(root: Optional[TreeNode], l: List[int] = []) -> List[int]:
+    if not root:
+        return l
+    l.append(root.val)
+    l = reverse_preorder(root.right, l)
+    l = reverse_preorder(root.left, l)
+    return l
+
+
+def reverse_postorder(root: Optional[TreeNode], l: List[int] = []) -> List[int]:
+    if not root:
+        return l
+    l = reverse_postorder(root.right, l)
+    l = reverse_postorder(root.left, l)
+    l.append(root.val)
+    return l
+
+
+def duplicate(root: Optional[TreeNode]) -> Optional[TreeNode]:
+    if not root:
+        return
+    node = TreeNode(root.val)
+    node.left = duplicate(root.left)
+    node.right = duplicate(root.right)
+    return node
+
+
+def duplicate_mirror(root: Optional[TreeNode]) -> Optional[TreeNode]:
+    if not root:
+        return
+    node = TreeNode(root.val)
+    node.left = duplicate_mirror(root.right)
+    node.right = duplicate_mirror(root.left)
+    return node
+
+
+def delete(root: Optional[TreeNode]):
+    if not root:
+        return
+    root.left = delete(root.left)
+    root.right = delete(root.right)
+    root.val = 0
+    return None
+
+
 class Test(unittest.TestCase):
     def test1(self):
         root = TreeNode(2, TreeNode(1), TreeNode(3, None, TreeNode(4)))
@@ -161,6 +245,71 @@ class Test(unittest.TestCase):
         output = remove(root, 6)
         expected = TreeNode(4, TreeNode(3, TreeNode(2)), TreeNode(7, TreeNode(5)))
         self.assertEqual(output, expected)
+
+    def test8(self):
+        root = TreeNode(
+            4, TreeNode(3, TreeNode(2)), TreeNode(6, TreeNode(5), TreeNode(7))
+        )
+        output = inorder(root, [])
+        expected = [2, 3, 4, 5, 6, 7]
+        self.assertEqual(output, expected)
+
+    def test9(self):
+        root = TreeNode(
+            4, TreeNode(3, TreeNode(2)), TreeNode(6, TreeNode(5), TreeNode(7))
+        )
+        output = preorder(root, [])
+        expected = [4, 3, 2, 6, 5, 7]
+        self.assertEqual(output, expected)
+
+    def test10(self):
+        root = TreeNode(
+            4, TreeNode(3, TreeNode(2)), TreeNode(6, TreeNode(5), TreeNode(7))
+        )
+        output = postorder(root, [])
+        expected = [2, 3, 5, 7, 6, 4]
+        self.assertEqual(output, expected)
+
+    def test11(self):
+        root = TreeNode(
+            4, TreeNode(3, TreeNode(2)), TreeNode(6, TreeNode(5), TreeNode(7))
+        )
+        output = reverse_inorder(root, [])
+        expected = [7, 6, 5, 4, 3, 2]
+        self.assertEqual(output, expected)
+
+    def test12(self):
+        root = TreeNode(
+            4, TreeNode(3, TreeNode(2)), TreeNode(6, TreeNode(5), TreeNode(7))
+        )
+        output = duplicate(root)
+        # output = root
+        # print(id(output))
+        # print(id(root))
+        self.assertEqual(output, root)
+        self.assertIsNot(output, root)
+
+    def test13(self):
+        root = TreeNode(
+            4, TreeNode(3, TreeNode(2)), TreeNode(6, TreeNode(5), TreeNode(7))
+        )
+        mirror = duplicate_mirror(root)
+        self.assertEqual(inorder(mirror, []), reverse_inorder(root, []))
+        self.assertEqual(preorder(root, []), reverse_preorder(mirror, []))
+
+    def test14(self):
+        node5= TreeNode(5)
+        root = TreeNode(
+            4, TreeNode(3, TreeNode(2)), TreeNode(6, node5, TreeNode(7))
+        )
+        output = delete(root)
+        self.assertIsNone(output)
+        self.assertIsNone(root.right)
+        self.assertIsNone(root.left)
+        self.assertEqual(root.val, 0)
+        self.assertIsNone(node5.right)
+        self.assertIsNone(node5.left)
+        self.assertEqual(node5.val, 0)
 
 
 if __name__ == "__main__":
