@@ -41,36 +41,56 @@ class Solution:
     #     return _buildTree(preorder, inorder, index_map)
 
     # time: O(n), space O(n)
+    # def buildTree(self, preorder: List[int], inorder: List[int]) -> Optional[TreeNode]:
+    #     def _buildTree(
+    #         index_map: Dict[int, int],
+    #         p: int,
+    #         start: int,
+    #         end: int,
+    #     ) -> Optional[TreeNode]:
+    #         if start > end:
+    #             return
+    #
+    #         v = preorder[p]
+    #         node = TreeNode(v)
+    #         i = index_map[v]  # O(1)
+    #         if start == end:
+    #             return node
+    #
+    #         # Left subtree: p + 1 is next position after root
+    #         node.left = _buildTree(index_map, p + 1, start, i - 1)
+    #
+    #         # Right subtree: skip root (1) + left subtree size (i - start)
+    #         node.right = _buildTree(index_map, p + 1 + (i - start), i + 1, end)
+    #
+    #         return node
+    #
+    #     # make map
+    #     index_map: Dict[int, int] = {}
+    #     for i in range(len(inorder)):
+    #         index_map[inorder[i]] = i
+    #
+    #     return _buildTree(index_map, 0, 0, len(preorder) - 1)
+
     def buildTree(self, preorder: List[int], inorder: List[int]) -> Optional[TreeNode]:
-        def _buildTree(
-            index_map: Dict[int, int],
-            p: int,
-            start: int,
-            end: int,
-        ) -> Optional[TreeNode]:
-            if start > end:
+        indices = {v: i for i, v in enumerate(inorder)}
+        c = 0
+
+        def dfs(l, r):
+            nonlocal c
+            if l > r:
                 return
 
-            v = preorder[p]
+            v = preorder[c]
+            i = indices[v]
             node = TreeNode(v)
-            i = index_map[v]  # O(1)
-            if start == end:
-                return node
-
-            # Left subtree: p + 1 is next position after root
-            node.left = _buildTree(index_map, p + 1, start, i - 1)
-
-            # Right subtree: skip root (1) + left subtree size (i - start)
-            node.right = _buildTree(index_map, p + 1 + (i - start), i + 1, end)
+            c += 1
+            node.left = dfs(l, i - 1)
+            node.right = dfs(i + 1, r)
 
             return node
 
-        # make map
-        index_map: Dict[int, int] = {}
-        for i in range(len(inorder)):
-            index_map[inorder[i]] = i
-
-        return _buildTree(index_map, 0, 0, len(preorder) - 1)
+        return dfs(0, len(inorder) - 1)
 
 
 class Test(unittest.TestCase):
