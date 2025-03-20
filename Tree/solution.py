@@ -1,5 +1,6 @@
 import unittest
 from typing import Optional, List
+from collections import deque
 
 
 class TreeNode:
@@ -193,6 +194,40 @@ def delete(root: Optional[TreeNode]):
     return None
 
 
+# time: O(n), space: O(n)
+def bfs(root: Optional[TreeNode]) -> List[int]:
+    res = []
+    q = deque([root])
+
+    while q:
+        curr = q.popleft()
+        res.append(curr.val)
+        if curr.left:
+            q.append(curr.left)
+        if curr.right:
+            q.append(curr.right)
+    return res
+
+
+# time: O(n), space: O(n)
+def bfs_with_level(root: Optional[TreeNode]) -> List[List[int]]:
+    res = []
+    q = deque([root])
+
+    while q:
+        l = []
+        for _ in range(len(q)):
+            curr = q.popleft()
+            l.append(curr.val)
+            if curr.left:
+                q.append(curr.left)
+            if curr.right:
+                q.append(curr.right)
+        res.append(l)
+
+    return res
+
+
 class Test(unittest.TestCase):
     def test1(self):
         root = TreeNode(2, TreeNode(1), TreeNode(3, None, TreeNode(4)))
@@ -298,10 +333,8 @@ class Test(unittest.TestCase):
         self.assertEqual(preorder(root, []), reverse_preorder(mirror, []))
 
     def test14(self):
-        node5= TreeNode(5)
-        root = TreeNode(
-            4, TreeNode(3, TreeNode(2)), TreeNode(6, node5, TreeNode(7))
-        )
+        node5 = TreeNode(5)
+        root = TreeNode(4, TreeNode(3, TreeNode(2)), TreeNode(6, node5, TreeNode(7)))
         output = delete(root)
         self.assertIsNone(output)
         self.assertIsNone(root.right)
@@ -310,6 +343,20 @@ class Test(unittest.TestCase):
         self.assertIsNone(node5.right)
         self.assertIsNone(node5.left)
         self.assertEqual(node5.val, 0)
+
+    def test15(self):
+        root = TreeNode(
+            4, TreeNode(3, TreeNode(2)), TreeNode(6, TreeNode(5), TreeNode(7))
+        )
+        expect = [4, 3, 6, 2, 5, 7]
+        self.assertEqual(bfs(root), expect)
+
+    def test16(self):
+        root = TreeNode(
+            4, TreeNode(3, TreeNode(2)), TreeNode(6, TreeNode(5), TreeNode(7))
+        )
+        expect = [[4], [3, 6], [2, 5, 7]]
+        self.assertEqual(bfs_with_level(root), expect)
 
 
 if __name__ == "__main__":
