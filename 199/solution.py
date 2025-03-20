@@ -5,6 +5,7 @@ from collections import deque
 
 
 class Solution:
+    # time: O(n), space: O(n)
     def rightSideView(self, root: Optional[TreeNode]) -> List[int]:
         q = deque([root] if root else [])
         res = []
