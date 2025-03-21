@@ -14,7 +14,6 @@ class TreeNode:
         self.left = left
         self.right = right
 
-    # print tree graph
     def __repr__(self) -> str:
         result = f"TreeNode({self.val}"
         if self.left or self.right:
