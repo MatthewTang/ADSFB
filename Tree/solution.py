@@ -227,6 +227,24 @@ def bfs_with_level(root: Optional[TreeNode]) -> List[List[int]]:
     return res
 
 
+def canReachLeaf(root: Optional[TreeNode]) -> bool:
+    if not root:
+        return True
+    if root.val == 0:
+        return False
+    return canReachLeaf(root.left) or canReachLeaf(root.right)
+
+
+def leafPath(root: Optional[TreeNode], path: List[int]) -> bool:
+    if not root:
+        return True
+    path.append(root.val)
+    if root.val == 0:
+        path.pop()
+        return False
+    return leafPath(root.left, path) or leafPath(root.right, path)
+
+
 class Test(unittest.TestCase):
     def test1(self):
         root = TreeNode(2, TreeNode(1), TreeNode(3, None, TreeNode(4)))
@@ -356,6 +374,37 @@ class Test(unittest.TestCase):
         )
         expect = [[4], [3, 6], [2, 5, 7]]
         self.assertEqual(bfs_with_level(root), expect)
+
+    def test17(self):
+        root = TreeNode(
+            4, TreeNode(0, None, TreeNode(7)), TreeNode(1, TreeNode(2), TreeNode(0))
+        )
+        self.assertTrue(canReachLeaf(root))
+
+    def test18(self):
+        root = TreeNode(
+            4, TreeNode(0, None, TreeNode(7)), TreeNode(1, TreeNode(2), TreeNode(0))
+        )
+        path = []
+        self.assertTrue(leafPath(root, path))
+        self.assertEqual(path, [4, 1, 2])
+
+    def test19(self):
+        root = TreeNode(
+            4,
+            TreeNode(0, None, TreeNode(7)),
+            TreeNode(3, TreeNode(2, TreeNode(0), TreeNode(0)), TreeNode(0)),
+        )
+        self.assertFalse(canReachLeaf(root))
+
+    def test20(self):
+        root = TreeNode(
+            4,
+            TreeNode(0, None, TreeNode(7)),
+            TreeNode(3, TreeNode(2, TreeNode(0), TreeNode(0)), TreeNode(0)),
+        )
+        path = []
+        self.assertFalse(leafPath(root, path))
 
 
 if __name__ == "__main__":
