@@ -3,6 +3,7 @@ from typing import List, Optional
 
 
 class Solution:
+    # time: O(n*(2^n))
     def subsets(self, nums: List[int]) -> List[List[int]]:
         if len(nums) == 0:
             return []
@@ -11,9 +12,9 @@ class Solution:
         res.append([nums[0]])
         res.append([])
 
-        for i in nums[1:]:
+        for i in nums[1:]: # O(n)
             tmp = []
-            for j in res:
+            for j in res: # 2 -> 4 -> 8, O(2^n)
                 l = j[:]
                 l.append(i)
                 tmp.append(l)
