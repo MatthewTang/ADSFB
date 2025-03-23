@@ -109,7 +109,7 @@ def remove(root: Optional[TreeNode], val: int) -> Optional[TreeNode]:
     return root
 
 
-# all of the following are DPS
+# all of the following are DFS
 # time: O(n)
 def inorder(root: Optional[TreeNode], l: List[int] = []) -> List[int]:
     if not root:

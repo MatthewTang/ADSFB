@@ -3,23 +3,49 @@ from typing import List, Optional
 
 
 class Solution:
-    # time: O(n*(2^n))
+    # # time: O(n*(2^n))
+    # def subsets(self, nums: List[int]) -> List[List[int]]:
+    #     if len(nums) == 0:
+    #         return [[]]
+    #
+    #     res = []
+    #     res.append([nums[0]])
+    #     res.append([])
+    #
+    #     for i in nums[1:]: # O(n)
+    #         tmp = []
+    #         for j in res: # 2 -> 4 -> 8, O(2^n)
+    #             l = j[:]
+    #             l.append(i)
+    #             tmp.append(l)
+    #         res += tmp
+    #
+    #     return res
+
+    # optimal iterative
+    # def subsets(self, nums: List[int]) -> List[List[int]]:
+    #     res = [[]]
+    #     for num in nums:
+    #         res += [ subset + [num] for subset in res]
+    #     return res
+
+    # recursive, backtracking
     def subsets(self, nums: List[int]) -> List[List[int]]:
-        if len(nums) == 0:
-            return []
-
         res = []
-        res.append([nums[0]])
-        res.append([])
+        subset = []
 
-        for i in nums[1:]: # O(n)
-            tmp = []
-            for j in res: # 2 -> 4 -> 8, O(2^n)
-                l = j[:]
-                l.append(i)
-                tmp.append(l)
-            res += tmp
+        def dfs(i):
+            if i >= len(nums):
+                res.append(subset[:])
+                return
 
+            subset.append(nums[i])
+            dfs(i + 1)
+
+            subset.pop()
+            dfs(i + 1)
+
+        dfs(0)
         return res
 
 
@@ -41,7 +67,7 @@ class Test(unittest.TestCase):
     def test3(self):
         s = Solution()
         nums = []
-        expected = []
+        expected = [[]]
         result = s.subsets(nums)
         self.assertListEqual(sorted(result), sorted(expected))
 
