@@ -17,6 +17,7 @@ class Heap:
             self.heap[i], self.heap[i // 2] = self.heap[i // 2], self.heap[i]
             i = i // 2
 
+    # O(h), O(log(n)) always balanced tree
     def pop(self) -> Optional[int]:
         if len(self.heap) == 1:
             return None
