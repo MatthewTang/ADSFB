@@ -29,7 +29,21 @@ class Heap:
 
         self.heap[1] = self.heap.pop()
 
-        i = 1
+        self.percolate_up(1)
+
+        return res
+
+    def heapify(self, arr: List[int]):
+        arr.append(arr[0])
+        arr[0] = 0
+        self.heap = arr
+        curr = len(arr) - 1 // 2
+        while curr > 0:
+            i = curr
+            self.percolate_up(i)
+            curr -= 1
+
+    def percolate_up(self, i: int) -> None:
         while True:
             l = i * 2
             r = i * 2 + 1
@@ -57,44 +71,6 @@ class Heap:
                 self.heap[i], self.heap[l] = self.heap[l], self.heap[i]
                 i = l
                 continue
-
-        return res
-
-    def heapify(self, arr: List[int]):
-        arr.append(arr[0])
-        arr[0] = 0
-        self.heap = arr
-        curr = len(arr) - 1 // 2
-        while curr > 0:
-            i = curr
-            while True:
-                l = i * 2
-                r = i * 2 + 1
-
-                if l >= len(self.heap):
-                    break
-
-                if r < len(self.heap):
-                    m = min(self.heap[i], self.heap[l], self.heap[r])
-                    if self.heap[i] == m:
-                        break
-                    if self.heap[l] == m:
-                        self.heap[i], self.heap[l] = self.heap[l], self.heap[i]
-                        i = l
-                        continue
-                    if self.heap[r] == m:
-                        self.heap[i], self.heap[r] = self.heap[r], self.heap[i]
-                        i = r
-                        continue
-
-                m = min(self.heap[i], self.heap[l])
-                if self.heap[i] == m:
-                    break
-                if self.heap[l] == m:
-                    self.heap[i], self.heap[l] = self.heap[l], self.heap[i]
-                    i = l
-                    continue
-            curr -= 1
 
     def __repr__(self) -> str:
         return str(self.heap[1:])
