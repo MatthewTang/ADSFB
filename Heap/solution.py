@@ -60,6 +60,42 @@ class Heap:
 
         return res
 
+    def heapify(self, arr: List[int]):
+        arr.append(arr[0])
+        arr[0] = 0
+        self.heap = arr
+        curr = len(arr) - 1 // 2
+        while curr > 0:
+            i = curr
+            while True:
+                l = i * 2
+                r = i * 2 + 1
+
+                if l >= len(self.heap):
+                    break
+
+                if r < len(self.heap):
+                    m = min(self.heap[i], self.heap[l], self.heap[r])
+                    if self.heap[i] == m:
+                        break
+                    if self.heap[l] == m:
+                        self.heap[i], self.heap[l] = self.heap[l], self.heap[i]
+                        i = l
+                        continue
+                    if self.heap[r] == m:
+                        self.heap[i], self.heap[r] = self.heap[r], self.heap[i]
+                        i = r
+                        continue
+
+                m = min(self.heap[i], self.heap[l])
+                if self.heap[i] == m:
+                    break
+                if self.heap[l] == m:
+                    self.heap[i], self.heap[l] = self.heap[l], self.heap[i]
+                    i = l
+                    continue
+            curr -= 1
+
     def __repr__(self) -> str:
         return str(self.heap[1:])
 
@@ -95,6 +131,43 @@ class Test(unittest.TestCase):
 
     def test2(self):
         h = Heap()
+        arr = [19, 16, 14, 21, 26, 19, 68, 65, 13]
+        # time complexity: O(nlog(n))
+        for i in arr:
+            h.push(i)
+        self.assertIs(h.pop(), 13)
+        self.assertIs(h.pop(), 14)
+        self.assertIs(h.pop(), 16)
+        self.assertIs(h.pop(), 19)
+        h.push(50)
+        self.assertIs(h.pop(), 19)
+        self.assertIs(h.pop(), 21)
+        self.assertIs(h.pop(), 26)
+        self.assertIs(h.pop(), 50)
+        self.assertIs(h.pop(), 65)
+        h.push(10)
+        self.assertIs(h.pop(), 10)
+        self.assertIs(h.pop(), 68)
+        h.push(19)
+        self.assertIs(h.pop(), 19)
+        self.assertIs(h.pop(), None)
+
+    def test3(self):
+        h = Heap()
+        self.assertIs(h.pop(), None)
+
+    def test4(self):
+        h = Heap()
+        h.heapify([19, 16, 14, 21, 26, 19, 68, 65, 13])
+        self.assertIs(h.pop(), 13)
+        self.assertIs(h.pop(), 14)
+        self.assertIs(h.pop(), 16)
+        self.assertIs(h.pop(), 19)
+        self.assertIs(h.pop(), 19)
+        self.assertIs(h.pop(), 21)
+        self.assertIs(h.pop(), 26)
+        self.assertIs(h.pop(), 65)
+        self.assertIs(h.pop(), 68)
         self.assertIs(h.pop(), None)
 
 
