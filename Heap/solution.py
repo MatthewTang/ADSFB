@@ -21,14 +21,12 @@ class Heap:
         if len(self.heap) == 1:
             return None
 
-        pop = self.heap[1]
+        if len(self.heap) == 2:
+            return self.heap.pop()
 
-        last = self.heap.pop()
+        res = self.heap[1]
 
-        if len(self.heap) == 1:
-            return last
-
-        self.heap[1] = last
+        self.heap[1] = self.heap.pop()
 
         i = 1
         while True:
@@ -59,7 +57,7 @@ class Heap:
                 i = l
                 continue
 
-        return pop
+        return res
 
     def __repr__(self) -> str:
         return str(self.heap[1:])
