@@ -18,17 +18,30 @@ import heapq
 #         ]  # O(k)
 
 
-# min-heap
+# # min-heap
+# class Solution:
+#     # O(n) + O(n) + O(n*log(n)) = O(n*log(n)), space: O(n)
+#     def kClosest(self, points: List[List[int]], k: int) -> List[List[int]]:
+#         points = [[point[0] ** 2 + point[1] ** 2, point] for point in points]  # O(n)
+#         heapq.heapify(points)  # O(n)
+#         res = []
+#         while k > 0:  # O(k) = O(n)
+#             res.append(heapq.heappop(points)[1])  # O(log(n))
+#             k -= 1
+#         return res
+
+# max-heap of size k
 class Solution:
-    # O(n) + O(n) + O(n*log(n)) = O(n*log(n)), space: O(n)
+    # time: O(n*logk + (n-k)*logk + k) = O(n*logk), space: O(k)
     def kClosest(self, points: List[List[int]], k: int) -> List[List[int]]:
-        points = [[point[0] ** 2 + point[1] ** 2, point] for point in points]  # O(n)
-        heapq.heapify(points)  # O(n)
-        res = []
-        while k > 0:  # O(k) = O(n)
-            res.append(heapq.heappop(points)[1])  # O(log(n))
-            k -= 1
-        return res
+        heap = []
+        while len(points):  # O(n)
+            point = points.pop()
+            heapq.heappush(heap, [-(point[0] ** 2 + point[1] ** 2), point])  # O(logk)
+            if len(heap) > k:  # O(n-k)
+                heapq.heappop(heap)  # O(logk)
+
+        return [p[1] for p in heap]  # O(k)
 
 
 class Test(unittest.TestCase):
