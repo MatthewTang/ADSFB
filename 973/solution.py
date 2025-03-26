@@ -1,20 +1,34 @@
 import unittest
 from typing import List, Optional
+import heapq
 
 
-# naive solution
+# # naive solution
+# class Solution:
+#     # time: O(n) + O(n*log(n)) + O(n) + O(k) = O(n*log(n)), space: O(n)
+#     def kClosest(self, points: List[List[int]], k: int) -> List[List[int]]:
+#         return [
+#             p[1]
+#             for p in sorted(
+#                 [[point[0] ** 2 + point[1] ** 2, point] for point in points],  # O(n)
+#                 key=lambda x: x[0],  # O(n*log(n))
+#             )  # O(n)
+#         ][
+#             :k
+#         ]  # O(k)
+
+
+# min-heap
 class Solution:
-    # time: O(n) + O(n*log(n)) + O(n) + O(k) = O(n*log(n)), space: O(n)
+    # O(n) + O(n) + O(n*log(n)) = O(n*log(n)), space: O(n)
     def kClosest(self, points: List[List[int]], k: int) -> List[List[int]]:
-        return [
-            p[1]
-            for p in sorted(
-                [[point[0] ** 2 + point[1] ** 2, point] for point in points],  # O(n)
-                key=lambda x: x[0],  # O(n*log(n))
-            )  # O(n)
-        ][
-            :k
-        ]  # O(k)
+        points = [[point[0] ** 2 + point[1] ** 2, point] for point in points]  # O(n)
+        heapq.heapify(points)  # O(n)
+        res = []
+        while k > 0:  # O(k) = O(n)
+            res.append(heapq.heappop(points)[1])  # O(log(n))
+            k -= 1
+        return res
 
 
 class Test(unittest.TestCase):
