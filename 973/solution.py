@@ -1,0 +1,39 @@
+import unittest
+from typing import List, Optional
+
+
+# naive solution
+class Solution:
+    # time: O(n) + O(n*log(n)) + O(n) + O(k) = O(n*log(n)), space: O(n)
+    def kClosest(self, points: List[List[int]], k: int) -> List[List[int]]:
+        return [
+            p[1]
+            for p in sorted(
+                [[point[0] ** 2 + point[1] ** 2, point] for point in points],  # O(n)
+                key=lambda x: x[0],  # O(n*log(n))
+            )  # O(n)
+        ][
+            :k
+        ]  # O(k)
+
+
+class Test(unittest.TestCase):
+    def test1(self):
+        s = Solution()
+        points = [[1, 3], [-2, 2]]
+        k = 1
+        expected = [[-2, 2]]
+        result = s.kClosest(points, k)
+        self.assertListEqual(sorted(result), sorted(expected))
+
+    def test2(self):
+        s = Solution()
+        points = [[3, 3], [5, -1], [-2, 4]]
+        k = 2
+        expected = [[3, 3], [-2, 4]]
+        result = s.kClosest(points, k)
+        self.assertListEqual(sorted(result), sorted(expected))
+
+
+if __name__ == "__main__":
+    unittest.main()
