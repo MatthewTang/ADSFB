@@ -2,15 +2,27 @@ import unittest
 from typing import List, Optional
 
 
+# class Solution:
+#     # time: O(n^2), space: O(n)
+#     def twoSum(self, nums: List[int], target: int) -> List[int]:
+#         countMap = {}
+#         for i in range(len(nums)):  # O(n)
+#             n = nums[i]  # O(1)
+#             for c in countMap:  # O(n)
+#                 if c + n == target:  # O(1)
+#                     return [countMap[c], i]  # O(1)
+#
+#             countMap[n] = i  # O(1)
+
+
 class Solution:
-    # time: O(n), space: O(n)
+    # O(n)
     def twoSum(self, nums: List[int], target: int) -> List[int]:
         countMap = {}
-        for i in range(len(nums)):  # O(n)
-            n = nums[i]  # O(1)
-            for c in countMap:  # O(1)
-                if c + n == target:  # O(1)
-                    return [countMap[c], i]  # O(1)
+        for i, n in enumerate(nums):  # O(n)
+            diff = target - n  # O(1)
+            if diff in countMap:  # O(1)
+                return [countMap[diff], i]
 
             countMap[n] = i  # O(1)
 
