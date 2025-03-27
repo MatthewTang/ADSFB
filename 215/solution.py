@@ -4,12 +4,23 @@ import heapq
 
 
 class Solution:
-    # time: O(n + (n-k)*logn + logk) = O(nlogn), space: O(1)
+    # # time: O(n + (n-k)*logn + logk) = O(nlogn), space: O(1)
+    # def findKthLargest(self, nums: List[int], k: int) -> int:
+    #     heap = nums
+    #     heapq.heapify(heap)  # O(n)
+    #     while len(heap) > k:  # (O(n-k)
+    #         heapq.heappop(heap)  # O(logn)
+    #     return heapq.heappop(heap)  # O(logk)
+
+    # time: O(n*(1+logk) + (n-k)*logk + logk) = O(nlogk), space: O(k)
     def findKthLargest(self, nums: List[int], k: int) -> int:
-        heap = nums
-        heapq.heapify(heap)  # O(n)
-        while len(heap) > k:  # (O(n-k)
-            heapq.heappop(heap)  # O(logn)
+        heap = []
+        while len(nums):  # O(n)
+            n = nums.pop()  # O(1)
+            heapq.heappush(heap, n)  # O(logk)
+            if len(heap) > k:  # O(n-k)
+                heapq.heappop(heap)  # O(logk)
+
         return heapq.heappop(heap)  # O(logk)
 
 
