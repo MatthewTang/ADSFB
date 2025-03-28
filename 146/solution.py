@@ -39,33 +39,72 @@ from typing import Dict, List, Optional
 #         self.map[key] = [value, self.age]
 
 
+class Node:
+    def __init__(
+        self, val: int, prev: Optional["Node"] = None, next: Optional["Node"] = None
+    ) -> None:
+        self.val: int = val  # key
+        self.prev: Optional[Node] = prev
+        self.next: Optional[Node] = next
+
+
+# space: O(n)
 class LRUCache:
     def __init__(self, capacity: int):
         self.capacity = capacity
-        self.map: Dict[int : List[int]] = {}  # key -> [value, age]
-        self.age = 0
-        pass
+        self.map1: Dict[int:int] = {}  # key -> value
+        self.map2: Dict[int:Node] = {}  # key -> Node
+        self.head = Node(0)  # easier for add/remove first
+        self.tail = Node(0)
+        self.head.next = self.tail
+        self.tail.prev = self.head
 
+    # O(1)
+    def remove(self, node: Node):
+        node.prev.next = node.next
+        node.next.prev = node.prev
+
+    # O(1)
+    def insert(self, node: Node):
+        node.prev = self.tail.prev
+        node.next = self.tail
+        self.tail.prev.next = node
+        self.tail.prev = node
+
+    # O(1)
     def get(self, key: int) -> int:
-        if key not in self.map:
+        if key not in self.map1:
             return -1
-        self.age += 1
-        value, _ = self.map[key]
-        self.map[key] = [value, self.age]
-        return value
+        node: Node = self.map2[key]
+        self.remove(node)
+        self.insert(node)
+        return self.map1[key]
 
-    # O(c), where c is capacity
+    # O(1)
     def put(self, key: int, value: int) -> None:
-        self.age += 1
 
-        if key in self.map or len(self.map) < self.capacity:
-            self.map[key] = [value, self.age]
+        if key in self.map1:
+            node: Node = self.map2[key]
+            self.remove(node)
+            self.insert(node)
+            self.map1[key] = value
             return
 
-        leastRecent = sorted(self.map.items(), key=lambda x: x[1][1])[0][0]
+        if len(self.map1) < self.capacity:
+            self.map1[key] = value
+            node = Node(key)
+            self.insert(node)
+            self.map2[key] = node
+            return
 
-        del self.map[leastRecent]
-        self.map[key] = [value, self.age]
+        self.map1[key] = value
+        node = Node(key)
+        self.insert(node)
+        self.map2[key] = node
+
+        head: Node = self.head.next
+        del self.map1[head.val]
+        self.remove(head)
 
 
 class Test(unittest.TestCase):
