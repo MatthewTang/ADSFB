@@ -1,10 +1,36 @@
 import unittest
-from typing import List, Optional
+from typing import List, Optional, Set, Tuple
 
 
 class Solution:
     def countPaths(self, grid: List[List[int]]) -> int:
-        return 2
+        def dfs(r: int, c: int, visit: Set[Tuple[int, int]]) -> int:
+            row, col = len(grid), len(grid[0])
+
+            # visited
+            if (r, c) in visit:
+                return 0
+            # out of bounds
+            if r < 0 or c < 0 or r >= row or c >= col:
+                return 0
+            # into wall
+            if grid[r][c] == 1:
+                return 0
+            # reach bottom right
+            if r == row - 1 and c == col - 1:
+                return 1
+
+            count = 0
+            visit.add((r, c))
+            count += dfs(r - 1, c, visit)
+            count += dfs(r, c + 1, visit)
+            count += dfs(r + 1, c, visit)
+            count += dfs(r, c - 1, visit)
+            visit.remove((r, c))
+
+            return count
+
+        return dfs(0, 0, set())
 
 
 class Test(unittest.TestCase):
@@ -12,6 +38,13 @@ class Test(unittest.TestCase):
         s = Solution()
         grid = [[0, 0, 0, 0], [1, 1, 0, 0], [0, 0, 0, 1], [0, 1, 0, 0]]
         expected = 2
+        result = s.countPaths(grid)
+        self.assertIs(result, expected)
+
+    def test2(self):
+        s = Solution()
+        grid=[[0, 0, 0, 0]]
+        expected = 1
         result = s.countPaths(grid)
         self.assertIs(result, expected)
 
