@@ -5,6 +5,7 @@ from typing import List, Optional, Set
 class Solution:
     # time: O(m*n), space: O(m*n)
     def numIslands(self, grid: List[List[str]]) -> int:
+        directions = [[1, 0], [-1, 0], [0, 1], [0, -1]]
         row, col = len(grid), len(grid[0])
 
         def dfs(r, c, visited: Set) -> None:
@@ -20,10 +21,8 @@ class Solution:
 
             visited.add((r, c))
 
-            dfs(r - 1, c, visited)
-            dfs(r, c + 1, visited)
-            dfs(r + 1, c, visited)
-            dfs(r, c - 1, visited)
+            for dr, dc in directions:
+                dfs(r + dr, c + dc, visited)
 
         visited = set()
         islands = 0
