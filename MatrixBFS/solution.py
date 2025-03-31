@@ -4,6 +4,7 @@ from collections import deque
 
 
 class Solution:
+    # time: O(m*n), space: O(m*n)
     def shortestPath(self, grid: List[List[int]]) -> int:
         ROW, COL = len(grid), len(grid[0])
         directions = [[1, 0], [-1, 0], [0, 1], [0, -1]]
