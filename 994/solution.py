@@ -4,12 +4,14 @@ from collections import deque
 
 
 class Solution:
+    # time: O(2*m*n) = O(m*n), space: O(m*n)
     def orangesRotting(self, grid: List[List[int]]) -> int:
         ROW, COL = len(grid), len(grid[0])
         directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]
         queue = deque()
         time, fresh = 0, 0
 
+        # O(m*n)
         for r in range(ROW):
             for c in range(COL):
                 if grid[r][c] == 1:
@@ -20,6 +22,7 @@ class Solution:
         if fresh == 0:
             return 0
 
+        # O(m*n)
         while queue:
             for _ in range(len(queue)):
                 r, c = queue.popleft()
