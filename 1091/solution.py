@@ -11,17 +11,17 @@ class Solution:
 
         ROW, COL = len(grid), len(grid[0])
         directions = [
-            [-1, 0],  # up
-            [-1, 1],  # up-right
-            [0, 1],  # right
-            [1, 1],  # down-right
-            [1, 0],  # down
-            [1, -1],  # down-left
-            [0, -1],  # left
-            [-1, -1],  # up-left
+            (-1, 0),  # up
+            (-1, 1),  # up-right
+            (0, 1),  # right
+            (1, 1),  # down-right
+            (1, 0),  # down
+            (1, -1),  # down-left
+            (0, -1),  # left
+            (-1, -1),  # up-left
         ]
-        q = deque([[0, 0]])
-        visit = set([(0, 0)])
+        q = deque([(0, 0)])
+        visit = {(0, 0)}
         length = 1
 
         while q:
@@ -40,7 +40,7 @@ class Solution:
                     if (new_r, new_c) in visit:
                         continue
                     visit.add((new_r, new_c))
-                    q.append([new_r, new_c])
+                    q.append((new_r, new_c))
             # print(r, c, length)
             length += 1
 

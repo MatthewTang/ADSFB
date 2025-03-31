@@ -7,10 +7,10 @@ class Solution:
     # time: O(m*n), space: O(m*n)
     def shortestPath(self, grid: List[List[int]]) -> int:
         ROW, COL = len(grid), len(grid[0])
-        directions = [[1, 0], [-1, 0], [0, 1], [0, -1]]
+        directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]
 
-        queue: Deque[List[int, int]] = deque([[0, 0]])
-        visit: Set[Tuple[int, int]] = set([(0, 0)])
+        queue: Deque[Tuple[int, int]] = deque([(0, 0)])
+        visit: Set[Tuple[int, int]] = {(0, 0)}
         length = 0
 
         if not grid or grid[0][0] == 1:
@@ -37,7 +37,7 @@ class Solution:
                     if (new_r, new_c) in visit:
                         continue
 
-                    queue.append([new_r, new_c])
+                    queue.append((new_r, new_c))
                     visit.add((new_r, new_c))
             length += 1
 
