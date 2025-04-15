@@ -24,7 +24,7 @@ class Node:
 
 
 class Solution:
-    # time complexity: O(n), where n is the number of nodes
+    # time complexity: O(n+e), where n is the number of nodes and e is the number of edges
     def cloneGraph(self, node: Optional[Node]) -> Optional[Node]:
         nodeMap: Dict[int, Node] = {}
 
@@ -43,7 +43,7 @@ class Solution:
         return _clone(node) if node else None
 
 
-# Helper function to convert adjacency list to Node, time complexity: O(n*m), where n is the number of nodes and m is the average number of neighbors
+# Helper function to convert adjacency list to Node, time complexity: O(n+e), where n is the number of nodes and e is the number of edges
 def adjListToNode(adjList: List[List[int]]) -> Optional[Node]:
     nodeMap: Dict[int, Node] = {}
     for val, neighbors in enumerate(adjList, 1):
