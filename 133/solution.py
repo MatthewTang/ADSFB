@@ -24,18 +24,15 @@ class Node:
 
 
 class Solution:
+    # time complexity: O(n), where n is the number of nodes
     def cloneGraph(self, node: Optional[Node]) -> Optional[Node]:
         nodeMap: Dict[int, Node] = {}
 
-        def _clone(node: Optional[Node]):
-            if not node:
-                return None
-
+        def _clone(node: Node):
             if node.val in nodeMap:
                 return nodeMap[node.val]
-            else:
-                nodeMap[node.val] = Node(node.val)
 
+            nodeMap[node.val] = Node(node.val)
             newNode = nodeMap[node.val]
 
             for neighbor in node.neighbors:
@@ -43,9 +40,10 @@ class Solution:
 
             return newNode
 
-        return _clone(node)
+        return _clone(node) if node else None
 
 
+# Helper function to convert adjacency list to Node, time complexity: O(n*m), where n is the number of nodes and m is the average number of neighbors
 def adjListToNode(adjList: List[List[int]]) -> Optional[Node]:
     nodeMap: Dict[int, Node] = {}
     for val, neighbors in enumerate(adjList, 1):
