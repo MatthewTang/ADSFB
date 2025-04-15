@@ -1,5 +1,6 @@
 import unittest
-from typing import Dict, List, Optional
+from typing import Deque, Dict, List, Optional
+from collections import deque
 
 
 class Node:
@@ -24,23 +25,42 @@ class Node:
 
 
 class Solution:
-    # time complexity: O(n+e), where n is the number of nodes and e is the number of edges
+    # # time complexity: O(n+e), where n is the number of nodes and e is the number of edges
+    # def cloneGraph(self, node: Optional[Node]) -> Optional[Node]:
+    #     nodeMap: Dict[int, Node] = {}
+    #
+    #     def _clone(node: Node):
+    #         if node.val in nodeMap:
+    #             return nodeMap[node.val]
+    #
+    #         nodeMap[node.val] = Node(node.val)
+    #         newNode = nodeMap[node.val]
+    #
+    #         for neighbor in node.neighbors:
+    #             newNode.neighbors.append(_clone(neighbor))
+    #
+    #         return newNode
+    #
+    #     return _clone(node) if node else None
+
     def cloneGraph(self, node: Optional[Node]) -> Optional[Node]:
         nodeMap: Dict[int, Node] = {}
 
-        def _clone(node: Node):
-            if node.val in nodeMap:
-                return nodeMap[node.val]
+        q: Deque[Node] = deque([node] if node else [])
 
-            nodeMap[node.val] = Node(node.val)
-            newNode = nodeMap[node.val]
+        while q:
+            curr = q.popleft()
+            if curr.val not in nodeMap:
+                nodeMap[curr.val] = Node(curr.val)
+            _node = nodeMap[curr.val]
+            for n in curr.neighbors:
+                if n.val not in nodeMap:
+                    q.append(n)
+                    nodeMap[n.val] = Node(n.val)
+                newNeighbor = nodeMap[n.val]
+                _node.neighbors.append(newNeighbor)
 
-            for neighbor in node.neighbors:
-                newNode.neighbors.append(_clone(neighbor))
-
-            return newNode
-
-        return _clone(node) if node else None
+        return nodeMap[node.val] if node else None
 
 
 # Helper function to convert adjacency list to Node, time complexity: O(n+e), where n is the number of nodes and e is the number of edges
@@ -66,7 +86,7 @@ class Test(unittest.TestCase):
         node2 = s.cloneGraph(node)
         self.assertEqual(node, node2)
 
-    def test1(self):
+    def test2(self):
         adjList = []
         node = adjListToNode(adjList)
         print(node)
