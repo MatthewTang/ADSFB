@@ -1,5 +1,5 @@
 import unittest
-from typing import List, Optional
+from typing import Dict, List, Optional
 
 
 class Solution:
@@ -10,20 +10,35 @@ class Solution:
     #         return 1
     #     return self.fib(n-1) + self.fib(n-2)
 
-    # def fib(self, n: int):
-    #     a, b = 0, 1
-    #     for _ in range(n + 1):
-    #         a, b = a + b, a
-    #     return b
-
+    # bottom-up dp
     def fib(self, n: int):
-        def _fib(n, a: int, b: int):
-            if n == 0:
-                return b
+        a, b = 0, 1
+        for _ in range(n + 1):
+            a, b = a + b, a
+        return b
 
-            return _fib(n - 1, a + b, a)
+    # def fib(self, n: int):
+    #     def _fib(n, a: int, b: int):
+    #         if n == 0:
+    #             return b
+    #
+    #         return _fib(n - 1, a + b, a)
+    #
+    #     return _fib(n + 1, 0, 1)
 
-        return _fib(n + 1, 0, 1)
+    # # top-down dp
+    # def fib(self, n: int):
+    #     def memoizedFib(n: int, cache: Dict):
+    #         if n == 0:
+    #             return 0
+    #         if n == 1:
+    #             return 1
+    #         if n in cache:
+    #             return cache[n]
+    #         cache[n] = self.fib(n - 1) + self.fib(n - 2)
+    #         return cache[n]
+    #
+    #     return memoizedFib(n, {})
 
 
 class Test(unittest.TestCase):
