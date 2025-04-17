@@ -5,6 +5,7 @@ from typing import Dict, List, Optional, Set
 class Solution:
     def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
         graph: Dict[int, List[int]] = {}
+        # O(e), where e no. of prerequisites/ edges
         for a, b in prerequisites:
             if a in graph:
                 graph[a].append(b)
@@ -14,6 +15,7 @@ class Solution:
             if b not in graph:
                 graph[b] = []
 
+        # O(n+e), n no. of nodes, e no. of neighbors
         def _dfs(val: int, visited: Set, cache: Set):
             if val in cache:
                 return True
