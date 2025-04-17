@@ -1,5 +1,5 @@
 import unittest
-from typing import List, Optional
+from typing import Dict, List, Optional
 
 
 class Solution:
@@ -23,19 +23,52 @@ class Solution:
     #     return search(n, 1) + search(n, 2)
 
     # DP, iternative approach, time: O(n), space: O(1)
+    # def climbStairs(self, n: int) -> int:
+    #     if n == 0:
+    #         return 0
+    #     if n == 1:
+    #         return 1
+    #     if n == 2:
+    #         return 2
+    #
+    #     prev1, prev2 = 2, 1
+    #
+    #     for _ in range(3, n + 1):
+    #         prev1, prev2 = prev1 + prev2, prev1
+    #     return prev1
+
+    # def climbStairs(self, n: int) -> int:
+    #     if n == 1:
+    #         return 1
+    #     if n == 2:
+    #         return 2
+    #
+    #     return self.climbStairs(n - 1) + self.climbStairs(n - 2)
+
+    # def climbStairs(self, n: int) -> int:
+    #     def _climbStairs(n: int, cache: Dict):
+    #         if n == 1:
+    #             return 1
+    #         if n == 2:
+    #             return 2
+    #
+    #         if not n in cache:
+    #             cache[n] = self.climbStairs(n - 1) + self.climbStairs(n - 2)
+    #
+    #         return cache[n]
+    #
+    #     return _climbStairs(n, {})
+
     def climbStairs(self, n: int) -> int:
-        if n == 0:
-            return 0
-        if n == 1:
-            return 1
-        if n == 2:
-            return 2
+        if n < 3:
+            return n
 
-        prev1, prev2 = 2, 1
+        a, b = 2, 1
 
-        for _ in range(3, n + 1):
-            prev1, prev2 = prev1 + prev2, prev1
-        return prev1
+        for _ in range(n - 2):
+            a, b = a + b, a
+
+        return a
 
 
 class Test(unittest.TestCase):
