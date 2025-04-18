@@ -15,25 +15,25 @@ class Solution:
     #
     #     return max(_rob(0), _rob(1))
 
-    # w memoization (aka top-down dp)
-    def rob(self, nums: List[int]) -> int:
-        cache = [None] * len(nums)
-
-        def _rob(i: int) -> int:
-            if i >= len(nums):
-                return 0
-
-            if not cache[i]:
-                a = _rob(i + 2)
-                b = _rob(i + 3)
-
-                cache[i] = nums[i] + max(a, b)
-
-            return cache[i]
-
-        res = max(_rob(0), _rob(1))
-        # print(cache)
-        return res
+    # # w memoization (aka top-down dp)
+    # def rob(self, nums: List[int]) -> int:
+    #     cache = [None] * len(nums)
+    #
+    #     def _rob(i: int) -> int:
+    #         if i >= len(nums):
+    #             return 0
+    #
+    #         if not cache[i]:
+    #             a = _rob(i + 2)
+    #             b = _rob(i + 3)
+    #
+    #             cache[i] = nums[i] + max(a, b)
+    #
+    #         return cache[i]
+    #
+    #     res = max(_rob(0), _rob(1))
+    #     # print(cache)
+    #     return res
 
     # # bottom-up dp
     # def rob(self, nums: List[int]) -> int:
@@ -53,6 +53,20 @@ class Solution:
     #         a, b, c = b, c, d
     #
     #     return max(b, d)
+
+    # bottom-up dp
+    def rob(self, nums: List[int]) -> int:
+        if len(nums) == 1:
+            return nums[0]
+
+        a, b = nums[0], nums[1]
+
+        i = 2
+        for _ in range(3, len(nums) + 1):
+            a, b = max(a, b), a + nums[i]
+            i += 1
+
+        return max(a, b)
 
 
 class Test(unittest.TestCase):
