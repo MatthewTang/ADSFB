@@ -5,12 +5,10 @@ from typing import Deque, List, Optional, Set, Tuple
 
 # 33
 class Solution:
+    # # time: O(2^(m*n))
     # def countPaths(self, grid: List[List[int]]) -> int:
     #     ROW, COL = len(grid), len(grid[0])
-    #     directions = [
-    #         (1, 0),
-    #         (0, 1),
-    #     ]
+    #     directions = [(1, 0), (0, 1)]
     #
     #     def dfs(r: int, c: int, visited: Set[Tuple[int, int]]):
     #         if r == ROW - 1 and c == COL - 1:
@@ -35,27 +33,98 @@ class Solution:
     #
     #     return dfs(0, 0, set())
 
+    # optimised, time: O(2^(m*n))
     def countPaths(self, grid: List[List[int]]) -> int:
         ROW, COL = len(grid), len(grid[0])
-        directions: List[Tuple[int, int]] = [(1, 0), (0, 1)]
 
-        q: Deque[Tuple[int, int]] = deque([(0, 0)])
-        count = 0
-
-        while q:
-            curr = q.popleft()
-            r, c = curr
+        def dfs(r: int, c: int):
             if r == ROW - 1 and c == COL - 1:
-                count += 1
-            for dr, dc in directions:
-                _r, _c = r + dr, c + dc
-                if _r < 0 or _c < 0:
-                    continue
-                if _r >= ROW or _c > COL:
-                    continue
-                q.append((_r, _c))
+                return 1
 
-        return count
+            if r >= ROW or c >= COL:
+                return 0
+
+            return dfs(r + 1, c) + dfs(r, c + 1)
+
+        return dfs(0, 0)
+
+    # def countPaths(self, grid: List[List[int]]) -> int:
+    #     ROW, COL = len(grid), len(grid[0])
+    #     directions: List[Tuple[int, int]] = [(1, 0), (0, 1)]
+    #
+    #     q: Deque[Tuple[int, int]] = deque([(0, 0)])
+    #     count = 0
+    #
+    #     while q:
+    #         curr = q.popleft()
+    #         r, c = curr
+    #         if r == ROW - 1 and c == COL - 1:
+    #             count += 1
+    #         for dr, dc in directions:
+    #             _r, _c = r + dr, c + dc
+    #             if _r < 0 or _c < 0:
+    #                 continue
+    #             if _r >= ROW or _c > COL:
+    #                 continue
+    #             q.append((_r, _c))
+    #
+    #     return count
+    #
+    # # memoisation, time: O(m*n)
+    # def countPaths(self, grid: List[List[int]]) -> int:
+    #     ROW, COL = len(grid), len(grid[0])
+    #     directions = [(1, 0), (0, 1)]
+    #     cache = [[0] * COL for _ in range(ROW)]
+    #
+    #     def dfs(r: int, c: int, visited: Set[Tuple[int, int]]):
+    #         if r < 0 or c < 0:
+    #             return 0
+    #
+    #         if r >= ROW or c >= COL:
+    #             return 0
+    #
+    #         if (r, c) in visited:
+    #             return 0
+    #
+    #         if cache[r][c]:
+    #             return cache[r][c]
+    #
+    #         if r == ROW - 1 and c == COL - 1:
+    #             cache[r][c] = 1
+    #             return 1
+    #
+    #         visited.add((r, c))
+    #         count = 0
+    #         for dr, dc in directions:
+    #             count += dfs(r + dr, c + dc, visited)
+    #         visited.remove((r, c))
+    #
+    #         cache[r][c] = count
+    #
+    #         return count
+    #
+    #     return dfs(0, 0, set())
+
+    # optimised, memoised, time: O(2^(m*n))
+    def countPaths(self, grid: List[List[int]]) -> int:
+        ROW, COL = len(grid), len(grid[0])
+        cache = [[0] * COL for _ in range(ROW)]
+
+        def dfs(r: int, c: int):
+            if r >= ROW or c >= COL:
+                return 0
+
+            if cache[r][c]:
+                return cache[r][c]
+
+            if r == ROW - 1 and c == COL - 1:
+                cache[r][c] = 1
+            else:
+                cache[r][c] = dfs(r + 1, c) + dfs(r, c + 1)
+
+            return cache[r][c]
+
+        return dfs(0, 0)
 
 
 class Test(unittest.TestCase):
