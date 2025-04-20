@@ -93,6 +93,21 @@ class Solution:
     #
     #     return dfs(0, 0)
 
+    # def countPaths(self, grid: List[List[int]]) -> int:
+    #     ROW, COL = len(grid), len(grid[0])
+    #
+    #     @lru_cache
+    #     def dfs(r: int, c: int):
+    #         if r >= ROW or c >= COL:
+    #             return 0
+    #
+    #         if r == ROW - 1 and c == COL - 1:
+    #             return 1
+    #         else:
+    #             return dfs(r + 1, c) + dfs(r, c + 1)
+    #
+    #     return dfs(0, 0)
+
     # # 2d dp: time: O(m*n), space: O(m*n)
     # def countPaths(self, grid: List[List[int]]) -> int:
     #     m, n = len(grid), len(grid[0])
