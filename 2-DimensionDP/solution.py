@@ -105,26 +105,36 @@ class Solution:
     #
     #     return dfs(0, 0, set())
 
-    # optimised, memoised, time: O(2^(m*n))
+    # # optimised, memoised, time: O(2^(m*n))
+    # def countPaths(self, grid: List[List[int]]) -> int:
+    #     ROW, COL = len(grid), len(grid[0])
+    #     cache = [[0] * COL for _ in range(ROW)]
+    #
+    #     def dfs(r: int, c: int):
+    #         if r >= ROW or c >= COL:
+    #             return 0
+    #
+    #         if cache[r][c]:
+    #             return cache[r][c]
+    #
+    #         if r == ROW - 1 and c == COL - 1:
+    #             cache[r][c] = 1
+    #         else:
+    #             cache[r][c] = dfs(r + 1, c) + dfs(r, c + 1)
+    #
+    #         return cache[r][c]
+    #
+    #     return dfs(0, 0)
+
+    # bottom-up dp
     def countPaths(self, grid: List[List[int]]) -> int:
         ROW, COL = len(grid), len(grid[0])
-        cache = [[0] * COL for _ in range(ROW)]
+        dp = [1] * (COL - 1)
+        for _ in range(ROW-1):
+            for i in range(len(dp)):
+                dp[i] = dp[i] + dp[i-1] if i > 0 else dp[i] + 1
 
-        def dfs(r: int, c: int):
-            if r >= ROW or c >= COL:
-                return 0
-
-            if cache[r][c]:
-                return cache[r][c]
-
-            if r == ROW - 1 and c == COL - 1:
-                cache[r][c] = 1
-            else:
-                cache[r][c] = dfs(r + 1, c) + dfs(r, c + 1)
-
-            return cache[r][c]
-
-        return dfs(0, 0)
+        return dp[-1]
 
 
 class Test(unittest.TestCase):
@@ -132,6 +142,13 @@ class Test(unittest.TestCase):
         s = Solution()
         grid = [[0] * 4 for _ in range(4)]
         expected = 20
+        result = s.countPaths(grid)
+        self.assertIs(result, expected)
+
+    def test2(self):
+        s = Solution()
+        grid = [[0] * 3 for _ in range(3)]
+        expected = 6 
         result = s.countPaths(grid)
         self.assertIs(result, expected)
 
