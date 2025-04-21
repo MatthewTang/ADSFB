@@ -50,17 +50,20 @@ class Solution:
     # bottom-up dp: time: O(m*n), space: O(n)
     def uniquePathsWithObstacles(self, obstacleGrid: List[List[int]]) -> int:
         m, n = len(obstacleGrid), len(obstacleGrid[0])
-
         dp = [0] * n
+
+        dp[0] = 1 if obstacleGrid[0][0] == 0 else 0
         for i in range(m):
             for j in range(n):
-                if obstacleGrid[i][j] == 1:
+                if i == 0 and j == 0:
+                    continue
+                elif obstacleGrid[i][j] == 1:
                     dp[j] = 0
-                    continue
-                if i == 0:
-                    dp[j] = dp[j - 1] if j > 0 else 1
-                    continue
-                if j > 0:
+                elif i == 0:
+                    dp[j] = dp[j - 1]
+                elif j == 0:
+                    dp[j] = dp[j]
+                else:
                     dp[j] = dp[j] + dp[j - 1]
 
         return dp[-1]
