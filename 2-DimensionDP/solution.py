@@ -125,25 +125,25 @@ class Solution:
     #
     #     return dp[m - 1][n - 1]
 
-    # # 1d dp: time: O(m*n), space: O(n)
-    # def countPaths(self, grid: List[List[int]]) -> int:
-    #     ROW, COL = len(grid), len(grid[0])
-    #     dp = [1] * COL
-    #     for _ in range(ROW - 1):
-    #         for i in range(COL):
-    #             dp[i] = dp[i] + dp[i - 1] if i > 0 else 1
-    #
-    #     return dp[-1]
-
-    # 1d dp optimised: time: O(m*n), space: O(n-1) = O(n)
+    # 1d dp: time: O(m*n), space: O(n)
     def countPaths(self, grid: List[List[int]]) -> int:
         ROW, COL = len(grid), len(grid[0])
-        dp = [1] * (COL - 1)
+        dp = [1] * COL
         for _ in range(ROW - 1):
-            for i in range(len(dp)):
-                dp[i] = dp[i] + dp[i - 1] if i > 0 else dp[i] + 1
+            for i in range(1, COL):
+                dp[i] = dp[i] + dp[i - 1]
 
         return dp[-1]
+
+    # # 1d dp optimised: time: O(m*n), space: O(n-1) = O(n)
+    # def countPaths(self, grid: List[List[int]]) -> int:
+    #     ROW, COL = len(grid), len(grid[0])
+    #     dp = [1] * (COL - 1)
+    #     for _ in range(ROW - 1):
+    #         for i in range(len(dp)):
+    #             dp[i] = dp[i] + dp[i - 1] if i > 0 else dp[i] + 1
+    #
+    #     return dp[-1]
 
 
 class Test(unittest.TestCase):
@@ -165,6 +165,13 @@ class Test(unittest.TestCase):
         s = Solution()
         grid = [[0] * 4 for _ in range(3)]
         expected = 10
+        result = s.countPaths(grid)
+        self.assertIs(result, expected)
+
+    def test4(self):
+        s = Solution()
+        grid = [[0] * 1 for _ in range(2)]
+        expected = 1
         result = s.countPaths(grid)
         self.assertIs(result, expected)
 
