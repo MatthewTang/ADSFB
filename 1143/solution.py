@@ -1,5 +1,6 @@
 import unittest
 from typing import List, Optional
+from functools import lru_cache
 
 
 class Solution:
@@ -51,8 +52,67 @@ class Solution:
     #
     #     return res
 
+    # def longestCommonSubsequence(self, text1: str, text2: str) -> int:
+    #     def dfs(i: int, j: int) -> int:
+    #         if i == len(text1) or j == len(text2):
+    #             return 0
+    #
+    #         if text1[i] == text2[j]:
+    #             return 1 + dfs(i + 1, j + 1)
+    #
+    #         return max(dfs(i + 1, j), dfs(i, j + 1))
+    #
+    #     return dfs(0, 0)
+
+    # def longestCommonSubsequence(self, text1: str, text2: str) -> int:
+    #     @lru_cache
+    #     def dfs(i: int, j: int) -> int:
+    #         if i == len(text1) or j == len(text2):
+    #             return 0
+    #
+    #         if text1[i] == text2[j]:
+    #             return 1 + dfs(i + 1, j + 1)
+    #
+    #         return max(dfs(i + 1, j), dfs(i, j + 1))
+    #
+    #     return dfs(0, 0)
+
+    # def longestCommonSubsequence(self, text1: str, text2: str) -> int:
+    #     l1, l2 = len(text1), len(text2)
+    #     cache = [[0] * l2 for _ in range(l1)]
+    #     def dfs(i: int, j: int) -> int:
+    #         if i == len(text1) or j == len(text2):
+    #             return 0
+    #         if cache[i][j]:
+    #             return cache[i][j]
+    #
+    #         if text1[i] == text2[j]:
+    #             o = 1 + dfs(i + 1, j + 1)
+    #             cache[i][j] = o
+    #             return o
+    #
+    #
+    #         o = max(dfs(i + 1, j), dfs(i, j + 1))
+    #         cache[i][j] = o
+    #         return o
+    #
+    #     return dfs(0, 0)
+
     def longestCommonSubsequence(self, text1: str, text2: str) -> int:
-        return
+        l1, l2 = len(text1), len(text2)
+        prev = [0] * l1
+        for i in range(l2 - 1, -1, -1):
+            curr = [0] * l1
+            for j in range(l1 - 1, -1, -1):
+                if text1[j] == text2[i]:
+                    curr[j] = (
+                        1 if j == l1 - 1 else max(curr[j + 1], prev[j + 1] + 1, prev[j])
+                    )
+                else:
+                    curr[j] = prev[j] if j == l1 - 1 else max(curr[j + 1], prev[j])
+            prev = curr
+
+        return max(prev)
 
 
 class Test(unittest.TestCase):
@@ -82,6 +142,14 @@ class Test(unittest.TestCase):
 
     def test4(self):
         s = Solution()
+        text2 = "aa"
+        text1 = "a"
+        expected = 1
+        result = s.longestCommonSubsequence(text1, text2)
+        self.assertIs(result, expected)
+
+    def test4(self):
+        s = Solution()
         text1 = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
         text2 = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
         expected = 210
@@ -93,6 +161,30 @@ class Test(unittest.TestCase):
         text1 = "yzebsbuxmtcfmtodclszgh"
         text2 = "ejevmhcvshclydqrulwbyha"
         expected = 6
+        result = s.longestCommonSubsequence(text1, text2)
+        self.assertEqual(result, expected)
+
+    def test6(self):
+        s = Solution()
+        text1 = "fcvafurqjylclorwfoladwfqzkbebslwnmpmlkbezkxoncvwhstwzwpqxqtyxozkpgtgtsjobujezgrkvevklmludgtyrmjaxyputqbyxqvupojutsjwlwluzsbmvyxifqtglwvcnkfsfglwjwrmtyxmdgjifyjwrsnenuvsdedsbqdovwzsdghclcdexmtsbexwrszihcpibwpidixmpmxshwzmjgtadmtkxqfkrsdqjcrmxkbkfoncrcvoxuvcdytajgfwrcxivixanuzerebuzklyhezevonqdsrkzetsrgfgxibqpmfuxcrinetyzkvudghgrytsvwzkjulmhanankxqfihenuhmfsfkfepibkjmzybmlkzozmluvybyzsleludsxkpinizoraxonmhwtkfkhudizepyzijafqlepcbihofepmjqtgrsxorunshgpazovuhktatmlcfklafivivefyfubunszyvarcrkpsnglkduzaxqrerkvcnmrurkhkpargvcxefovwtapedaluhclmzynebczodwropwdenqxmrutuhehadyfspcpuxyzodifqdqzgbwhodcjonypyjwbwxepcpujerkrelunstebopkncdazexsbezmhynizsvarafwfmnclerafejgnizcbsrcvcnwrolofyzulcxaxqjqzunedidulspslebifinqrchyvapkzmzwbwjgbyrqhqpolwjijmzyduzerqnadapudmrazmzadstozytonuzarizszubkzkhenaxivytmjqjgvgzwpgxefatetoncjgjsdilmvgtgpgbibexwnexstipkjylalqnupexytkradwxmlmhsnmzuxcdkfkxyfgrmfqtajatgjctenqhkvyrgvapctqtyrufcdobibizihuhsrsterozotytubefutaxcjarknynetipehoduxyjstufwvkvwvwnuletybmrczgtmxctuny"
+        text2 = "nohgdazargvalupetizezqpklktojqtqdivcpsfgjopaxwbkvujilqbclehulatshehmjqhyfkpcfwxovajkvankjkvevgdovazmbgtqfwvejczsnmbchkdibstklkxarwjqbqxwvixavkhylqvghqpifijohudenozotejoxavkfkzcdqnoxydynavwdylwhatslyrwlejwdwrmpevmtwpahatwlaxmjmdgrebmfyngdcbmbgjcvqpcbadujkxaxujudmbejcrevuvcdobolcbstifedcvmngnqhudixgzktcdqngxmruhcxqxypwhahobudelivgvynefkjqdyvalmvudcdivmhghqrelurodwdsvuzmjixgdexonwjczghalsjopixsrwjixuzmjgxydqnipelgrivkzkxgjchibgnqbknstspujwdydszohqjsfuzstyjgnwhsrebmlwzkzijgnmnczmrehspihspyfedabotwvwxwpspypctizyhcxypqzctwlspszonsrmnyvmhsvqtkbyhmhwjmvazaviruzqxmbczaxmtqjexmdudypovkjklynktahupanujylylgrajozobsbwpwtohkfsxeverqxylwdwtojoxydepybavwhgdehafurqtcxqhuhkdwxkdojipolctcvcrsvczcxedglgrejerqdgrsvsxgjodajatsnixutihwpivihadqdotsvyrkxehodybapwlsjexixgponcxifijchejoxgxebmbclczqvkfuzgxsbshqvgfcraxytaxeviryhexmvqjybizivyjanwxmpojgxgbyhcruvqpafwjslkbohqlknkdqjixsfsdurgbsvclmrcrcnulinqvcdqhcvwdaxgvafwravunurqvizqtozuxinytafopmhchmxsxgfanetmdcjalmrolejidylkjktunqhkxchyjmpkvsfgnybsjedmzkrkhwryzan"
+        expected = 323
+        result = s.longestCommonSubsequence(text1, text2)
+        self.assertEqual(result, expected)
+
+    def test7(self):
+        s = Solution()
+        text1 = "abab"
+        text2 = "baab"
+        expected = 3
+        result = s.longestCommonSubsequence(text1, text2)
+        self.assertIs(result, expected)
+
+    def test8(self):
+        s = Solution()
+        text1 = "bsbininm"
+        text2 = "jmjkbkjkv"
+        expected = 1
         result = s.longestCommonSubsequence(text1, text2)
         self.assertIs(result, expected)
 
