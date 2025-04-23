@@ -105,9 +105,7 @@ class Solution:
             curr = [0] * l1
             for j in range(l1 - 1, -1, -1):
                 if text1[j] == text2[i]:
-                    curr[j] = (
-                        1 if j == l1 - 1 else max(curr[j + 1], prev[j + 1] + 1, prev[j])
-                    )
+                    curr[j] = 1 if j == l1 - 1 else prev[j + 1] + 1
                 else:
                     curr[j] = prev[j] if j == l1 - 1 else max(curr[j + 1], prev[j])
             prev = curr
