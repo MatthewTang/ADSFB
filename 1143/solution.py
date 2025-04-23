@@ -3,32 +3,56 @@ from typing import List, Optional
 
 
 class Solution:
-    # dfs, time: O(n * 2^n) + O(m * 2^m) + O(2^(n+m)) = O(2^(n+m))
+    # # dfs (list): O(2^(m+n))
+    # def longestCommonSubsequence(self, text1: str, text2: str) -> int:
+    #     def dfs(text: str):
+    #         if len(text)  == 0:
+    #             return []
+    #
+    #         c = text[0]
+    #         _ss = [c]
+    #         ss = dfs(text[1:])
+    #         for s in ss:
+    #             _ss.append(s)
+    #             _ss.append(c + s)
+    #         return _ss
+    #
+    #     ss1 = dfs(text1)
+    #     ss2 = dfs(text2)
+    #
+    #     res = 0
+    #     for s in ss1:
+    #         if s in ss2:
+    #             res = max(res, len(s))
+    #
+    #     return res
+    #
+    # # dfs (map): O(n * 2^n + m * 2^m)
+    # def longestCommonSubsequence(self, text1: str, text2: str) -> int:
+    #     def dfs(text: str):
+    #         if len(text) == 0:
+    #             return {}
+    #
+    #         c = text[0]
+    #         _ss = {c: 1}
+    #         ss = dfs(text[1:])
+    #         for s in ss:
+    #             _ss[s] = 1
+    #             _ss[c + s] = 1
+    #         return _ss
+    #
+    #     ss1 = dfs(text1)
+    #     ss2 = dfs(text2)
+    #
+    #     res = 0
+    #     for s in ss1:
+    #         if s in ss2:
+    #             res = max(res, len(s))
+    #
+    #     return res
+
     def longestCommonSubsequence(self, text1: str, text2: str) -> int:
-        def dfs(text: str, i: int, res: List[str]):
-            l = len(text)
-            if i >= l:
-                return
-            c = text[i]
-            _res = [c]
-            for r in res:  # O(2^i)
-                _res.append(r + c)  # O(i)
-            res += _res  # O(2^i)
-            dfs(text, i + 1, res)
-
-        res1 = []
-        dfs(text1, 0, res1)  # O(n * 2^n)
-
-        res2 = []
-        dfs(text2, 0, res2)  # O(m * 2^m)
-
-        res = 0
-        # O(2^n * 2^m) = O(2^(n+m))
-        for r in res1:
-            if r in res2:
-                res = max(res, len(r))
-
-        return res
+        return
 
 
 class Test(unittest.TestCase):
@@ -53,6 +77,22 @@ class Test(unittest.TestCase):
         text1 = "abc"
         text2 = "def"
         expected = 0
+        result = s.longestCommonSubsequence(text1, text2)
+        self.assertIs(result, expected)
+
+    def test4(self):
+        s = Solution()
+        text1 = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        text2 = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        expected = 210
+        result = s.longestCommonSubsequence(text1, text2)
+        self.assertIs(result, expected)
+
+    def test5(self):
+        s = Solution()
+        text1 = "yzebsbuxmtcfmtodclszgh"
+        text2 = "ejevmhcvshclydqrulwbyha"
+        expected = 6
         result = s.longestCommonSubsequence(text1, text2)
         self.assertIs(result, expected)
 
