@@ -3,11 +3,21 @@ from typing import List, Optional
 
 
 class Solution:
+    # # O(log(n))
+    # def hammingWeight(self, n):
+    #     c = 0
+    #     while n:
+    #         c += 1 if n & 1 else 0
+    #         n >>= 1
+    #     return c
+
+    # O(1)
     def hammingWeight(self, n):
         c = 0
-        while n:
-            c += 1 if n & 1 else 0
-            n >>= 1
+        for i in range(31):
+            b = 1 << i
+            if b & n:
+                c += 1
         return c
 
 

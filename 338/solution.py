@@ -19,6 +19,23 @@ class Solution:
             res.append(_countBits(i))  # O(log(i))
         return res
 
+    # time: O(n)
+    def countBits(self, n: int) -> List[int]:
+        # time: O(1)
+        def _countBits(n: int) -> int:
+            c = 0
+            for i in range(17):
+                b = 1 << i
+                if b & n:
+                    c += 1
+            return c
+
+        res = []
+        # O(n)
+        for i in range(n + 1):
+            res.append(_countBits(i))  # O(1)
+        return res
+
 
 class Test(unittest.TestCase):
     def test1(self):
