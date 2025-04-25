@@ -3,7 +3,9 @@ from typing import List, Optional
 
 
 class Solution:
+    # time: O(nlogn)
     def countBits(self, n: int) -> List[int]:
+        # time: O(log(n))
         def _countBits(n: int) -> int:
             c = 0
             while n:
@@ -12,8 +14,9 @@ class Solution:
             return c
 
         res = []
+        # O(n)
         for i in range(n + 1):
-            res.append(_countBits(i))
+            res.append(_countBits(i))  # O(log(i))
         return res
 
 
